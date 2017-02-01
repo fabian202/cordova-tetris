@@ -6,7 +6,10 @@ const context = canvas.getContext('2d');
 canvas.height = window.innerHeight;
 canvas.width = window.innerWidth;
 
-context.scale(20,20);
+const scale = canvas.width/12;
+const scaleh = canvas.height/20;
+
+context.scale(scale,scaleh);
 
 const matrix = [
   [0, 0, 0],
@@ -40,6 +43,18 @@ function drawMatrix(matrix, offset) {
   });
 }
 
+function merge(arena, player) {
+  player.matrix.forEach((row, y) => {
+    row.forEach((value, x) => {
+      if(value) {
+        console.log(y + player.pos.y, x + player.pos.x);
+        console.log(value);
+        arena[y + player.pos.y][x + player.pos.x] = value;
+      }
+    });
+  });
+}
+
 const player = {
   pos: { x:5, y:5},
   matrix: matrix
@@ -51,7 +66,7 @@ function playerDrop() {
 }
 
 let dropCounter = 0;
-let dropInterval = 500;
+let dropInterval = 2000;
 let lastTime = 0;
 
 function update(time) {
@@ -68,8 +83,6 @@ function update(time) {
 }
 
 const arena = createMatrix(12, 20);
-console.log(arena);
-console.table(arena);
 
 var hammertime = new Hammer(canvas, { recognizers: [
 		// RecognizerClass, [options], [recognizeWith, ...], [requireFailure, ...]
